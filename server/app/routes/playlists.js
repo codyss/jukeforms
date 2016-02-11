@@ -2,7 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+
 module.exports = router;
 
 router.get('/', function (req, res, next) {
@@ -27,10 +29,15 @@ router.param('playlistId', function (req, res, next, id) {
   mongoose.model('Playlist')
   .findById(id)
   .populate('songs')
-  .populate('artists')
+  .populate('songs.artists')
   .then(function (playlist) {
     if(!playlist) throw new Error('not found!');
+    // Artist.populate(playlist, {
+    //   path: 'songs.artists',
+    //   select: 'name'
+    // })
     req.playlist = playlist;
+    console.log(playlist)
     next();
   })
   .then(null, next);

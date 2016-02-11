@@ -11,6 +11,9 @@
     <script src="/js/album/album.controllers.js" defer></script>
     <script src="/js/album/album.factory.js" defer></script>
     <script src="/js/album/album.states.js" defer></script>
+    <script src="/js/playlist/playlist.states.js" defer></script>
+    <script src="/js/playlist/playlist.controller.js" defer></script>
+    <script src="/js/playlist/playlist.factory.js" defer></script>
     <script src="/js/player/player.controller.js" defer></script>
     <script src="/js/player/player.factory.js" defer></script>
     <script src="/js/sidebar/sidebar.controller.js" defer></script>
@@ -36,12 +39,19 @@
             </h4>
           </section>
           <hr>
-          <section>
+          <section ng-controller="PlaylistCtrl" >
             <h4 class="text-muted">PLAYLISTS</h4>
             <p>
-              <a class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> PLAYLIST</a>
+              <a class="btn btn-primary btn-block" ui-sref="newplaylist"><span class="glyphicon glyphicon-plus"></span> PLAYLIST</a>
             </p>
+            <section class="ng-cloak" ng-repeat="playlist in playlists">
+              <h4 ui-sref-active="active" class="playlist-item">
+                <a ui-sref="playlist({playlist: playlist._id})">{{playlist.name}}</a>
+              </h4>
           </section>
+          </section>
+          
+          
         </sidebar>
       </div>
 

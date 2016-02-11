@@ -22,8 +22,18 @@ juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, $state) {
 
 });
 
-juke.controller('EachPlaylistCtrl', function ($scope, PlaylistFactory, thePlaylist) {
+juke.controller('EachPlaylistCtrl', function ($scope, PlaylistFactory, thePlaylist, allSongs) {
   
   $scope.playlist = thePlaylist;
+
+  $scope.allSongs = allSongs;
+
+  $scope.postmanPostSong = function (song) {
+    PlaylistFactory.addSong(song)
+    .then(song=> { 
+      console.log(song);
+      $scope.playlist.songs.push(song)
+    });
+  }
 
 });

@@ -26,7 +26,8 @@ router.post('/', function (req, res, next) {
 router.param('playlistId', function (req, res, next, id) {
   mongoose.model('Playlist')
   .findById(id)
-  .populate('artists songs')
+  .populate('songs')
+  .populate('artists')
   .then(function (playlist) {
     if(!playlist) throw new Error('not found!');
     req.playlist = playlist;

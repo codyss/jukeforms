@@ -11,6 +11,7 @@ module.exports = router;
 router.get('/', function (req, res, next) {
   mongoose.model('Song')
   .find(req.query)
+  .populate('artists')
   .then(function (songs) {
     res.json(songs);
   })

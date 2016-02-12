@@ -16,6 +16,12 @@ juke.factory('PlaylistFactory', function ($http, SongFactory, $stateParams) {
 
   }
 
+  PlaylistFactory.remove = function (song) {
+    return $http.delete('/api/playlists/' + $stateParams.Id + '/songs/' + song._id)
+  }
+
+
+
   PlaylistFactory.getPlaylists = function () {
     return $http.get('api/playlists')
       .then(res=> {
@@ -26,11 +32,13 @@ juke.factory('PlaylistFactory', function ($http, SongFactory, $stateParams) {
 
   PlaylistFactory.fetchById = function (id) {
     return $http.get('api/playlists/'+id)
-    .then(res=> {
-      console.log(res.data);
-      return res.data
+    .then(res=> res.data)
+    .then(playlist => {
+      playlist.songs = playlist.songs.map(SongFactory.convert)
+      return playlist
     })
   }
+
 
   PlaylistFactory.getAllSongs = function () {
     return $http.get('api/songs')

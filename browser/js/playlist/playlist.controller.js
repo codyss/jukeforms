@@ -22,7 +22,7 @@ juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, $state) {
 
 });
 
-juke.controller('EachPlaylistCtrl', function ($scope, PlaylistFactory, thePlaylist, allSongs) {
+juke.controller('EachPlaylistCtrl', function ($scope, PlaylistFactory, PlayerFactory, thePlaylist, allSongs, SongFactory) {
   
   $scope.playlist = thePlaylist;
 
@@ -32,8 +32,36 @@ juke.controller('EachPlaylistCtrl', function ($scope, PlaylistFactory, thePlayli
     PlaylistFactory.addSong(song)
     .then(song=> { 
       console.log(song);
+      SongFactory.convert(song);
       $scope.playlist.songs.push(song)
     });
   }
+
+  $scope.remove = function (song) {
+    PlaylistFactory.remove(song);
+    $scope.playlist.songs.forEach(function (playlistSong, index) {
+      if(playlistSong._id === song._id) {
+        $scope.playlist.songs.splice(index, 1);
+      }
+    })
+  }
+
+  $scope.toggle = function (song) {
+    if (song !== PlayerFactory.getCurrentSong()) {
+      PlayerFactory.start(song, $scope.playlist.songs);
+    } else if ( PlayerFactory.isPlaying() ) {
+      PlayerFactory.pause();
+    } else {
+      PlayerFactory.resume();
+    }
+  };
+
+  $scope.getCurrentSong = function () {
+    return PlayerFactory.getCurrentSong();
+  };
+
+  $scope.isPlaying = function (song) {
+    return PlayerFactory.isPlaying() && PlayerFactory.getCurrentSong() === song;
+  };
 
 });
